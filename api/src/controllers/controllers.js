@@ -1,6 +1,6 @@
 //Controllers
-const { Router } = require("express");
-const { axios } = require("axios");
+
+const axios = require("axios");
 const { Pokemon, Type } = require("../db");
 
 //Pokes que me trae la API

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { axios } = require("axios");
-const { Pokemon, Type } = require("../models");
+const { Pokemon, Type } = require("../db");
 
 const typesRouter = Router();
 
