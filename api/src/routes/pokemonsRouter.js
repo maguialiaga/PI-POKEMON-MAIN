@@ -1,6 +1,5 @@
 const { Router } = require("express");
-const axios = require("axios");
-const { Pokemon, Type } = require("../db");
+const { Pokemon } = require("../db");
 const {
   getApiInfo,
   getInfoDb,
@@ -59,11 +58,15 @@ pokemonsRouter.get("/:id", async (req, res) => {
 
 //POST
 //Recibe los datos recolectados desde el formulario controlado de la ruta de creación de pokemons por body
+// imagen, nombre y tipos
+// número de Pokemon (id)
+// Estadísticas (vida, ataque, defensa, velocidad)
+// Altura y peso
 // Crea un pokemon en la base de datos relacionado con sus tipos.
 
 pokemonsRouter.post("/", async (req, res) => {
   try {
-    const { name, hp, attack, defense, speed, height, weigth, types } =
+    const { name, hp, attack, defense, speed, height, weight, types, image } =
       req.body;
     if (
       !name ||
@@ -72,13 +75,17 @@ pokemonsRouter.post("/", async (req, res) => {
       !defense ||
       !speed ||
       !height ||
-      !weigth ||
-      !types
+      !weight ||
+      !types ||
+      !image
     ) {
       res.status(400).send("missing info");
     } else {
-      const newPoke = await Pokemon.create(req.body);
-      res.status(200).send(newPoke);
+      if (image) {
+        let urlImg = `"${image}"`;
+      } else {
+        // urlImg =
+      }
     }
   } catch (error) {
     res.status(400).send({ error: error.message });

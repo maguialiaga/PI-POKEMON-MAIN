@@ -24,14 +24,14 @@ const getApiInfo = async () => {
           speed: datosPoke.data.stats[5].base_stat,
           height: datosPoke.data.height,
           weigth: datosPoke.data.weight,
-          types: datosPoke.data.types.map((t) => t.type.name), // Le hago el .map para q me recorra el array y  me devuelva todos los tipos q puede llegar a ser mi pokemon, puede ser varios types dentro de ese array.
+          types: datosPoke.data.types.map((t) => t.type.name), // Le hago el .map para q me recorra el array y  me devuelva todos los tipos q puede llegar a ser mi pokemon, me queda un array con los nombres de los tipos q sea ese pokemon
           image: datosPoke.data.sprites.other.dream_world.front_default,
         };
       })
     );
     return infoPokes;
   } catch (error) {
-    console.log("error de getApiInfo", error);
+    console.log("error from getApiInfo", error);
   }
 };
 
@@ -56,7 +56,7 @@ const getAllPokes = async () => {
     const allInfo = await apiInfo.concat(dbInfo);
     return allInfo;
   } catch (error) {
-    console.log("error de getAllPokes", error);
+    console.log("error from getAllPokes", error);
   }
 };
 
