@@ -9,6 +9,7 @@ const {
 
 const pokemonsRouter = Router();
 
+//GET
 //Obtener un listado de los pokemons desde pokeapi
 //Debe devolver solo los datos necesarios para la ruta principal
 // Obtener el pokemon que coincida exactamente con el nombre pasado como query parameter (Puede ser de pokeapi o creado por nosotros)
@@ -19,18 +20,19 @@ pokemonsRouter.get("/", async (req, res) => {
     const { name } = req.query;
     const allPokes = await getAllPokes();
     if (name) {
-      const pokeName = await allPokes.filter((poke) => {
-        poke.name.toLowerCase() === name.toLowerCase();
+      const pokeName = allPokes.filter((poke) => {
+        return poke.name.toLowerCase() === name.toLowerCase();
       });
       if (pokeName.length) {
         res.status(200).send(pokeName);
       } else {
         res.status(400).send("pokeName not found");
       }
+    } else {
+      res.status(200).send(allPokes);
     }
-    res.status(200).send(allPokes);
   } catch (error) {
-    return res.status(200).send({ error: error.message });
+    return res.status(200).json({ error: error.message });
   }
 });
 
@@ -38,17 +40,45 @@ pokemonsRouter.get("/", async (req, res) => {
 // Debe traer solo los datos pedidos en la ruta de detalle de pokemon
 // Tener en cuenta que tiene que funcionar tanto para un id de un pokemon existente en pokeapi o uno creado por ustedes
 
-pokemonsRouter.get("/:idPokemon", async (req, res) => {
+pokemonsRouter.get("/:id", async (req, res) => {
   try {
-    const { idPokemon } = req.params;
+    const { id } = req.params;
     const allPokes = await getAllPokes();
-    const pokeId = await allPokes.find((poke) => {
-      poke.id === parseInt(idPokemon);
+    const pokeId = allPokes.find((poke) => {
+      return poke.id === parseInt(id);
     });
     if (pokeId) {
       res.status(200).send(pokeId);
     } else {
       res.status(400).send("pokeId not found");
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+//POST
+//Recibe los datos recolectados desde el formulario controlado de la ruta de creación de pokemons por body
+// Crea un pokemon en la base de datos relacionado con sus tipos.
+
+pokemonsRouter.post("/", async (req, res) => {
+  try {
+    const { name, hp, attack, defense, speed, height, weigth, types } =
+      req.body;
+    if (
+      !name ||
+      !hp ||
+      !attack ||
+      !defense ||
+      !speed ||
+      !height ||
+      !weigth ||
+      !types
+    ) {
+      res.status(400).send("missing info");
+    } else {
+      const newPoke = await Pokemon.create(req.body);
+      res.status(200).send(newPoke);
     }
   } catch (error) {
     res.status(400).send({ error: error.message });
